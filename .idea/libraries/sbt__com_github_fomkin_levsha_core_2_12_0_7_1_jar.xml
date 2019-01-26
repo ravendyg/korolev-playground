@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="sbt: com.github.fomkin:levsha-core_2.12:0.7.1:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.github.fomkin/levsha-core_2.12/jars/levsha-core_2.12-0.7.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.github.fomkin/levsha-core_2.12/srcs/levsha-core_2.12-0.7.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
