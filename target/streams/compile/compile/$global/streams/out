@@ -1,4 +1,0 @@
-[0m[[0m[31merror[0m] [0m[0m/home/me/study/kr/tabs/src/main/scala/tabs.scala:89:25: forward reference extends over definition of value x$2[0m
-[0m[[0m[31merror[0m] [0m[0m                        _.copy(messages = msgs)[0m
-[0m[[0m[31merror[0m] [0m[0m                        ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
