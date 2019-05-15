@@ -1,1 +1,3 @@
-Not sure what should go inside VCS. Commit everything.
+First glance at Scala + Korolev.
+
+Just jump some trash here.
