@@ -5,6 +5,7 @@ import korolev.state.javaSerialization._
 
 class XmlDoc(
   val text: String,
+  val expanded: Boolean,
   val children: List[XmlDoc],
 ) {}
 

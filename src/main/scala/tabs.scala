@@ -25,15 +25,15 @@ object tabs extends App {
     new MyState(
       tab = 0,
       xmls = List(
-        new XmlDoc("item 1", List(
-          new XmlDoc("item 1_1", List()),
-          new XmlDoc("item 1_2", List(
-            new XmlDoc("item 1_2_1", List()),
+        new XmlDoc("item 1", true, List(
+          new XmlDoc("item 1_1", true, List()),
+          new XmlDoc("item 1_2", true, List(
+            new XmlDoc("item 1_2_1", true, List()),
           )),
         )),
-        new XmlDoc("item 2", List()),
-        new XmlDoc("item 3", List(
-          new XmlDoc("item 3_1", List()),
+        new XmlDoc("item 2", true, List()),
+        new XmlDoc("item 3", true, List(
+          new XmlDoc("item 3_1", true, List()),
         )),
       ),
     )
@@ -267,13 +267,44 @@ object tabs extends App {
       "Tab 3"
     )
 
+  // better to use some library to handle trees
+  // this implementation would recreate every element (except those below the toggled one)
+  // but as a quick and dirty hack it would work
+  def toggleNodeVisibility(node: XmlDoc, doc: XmlDoc): XmlDoc =
+    if (node.equals(doc))
+        new XmlDoc(doc.text, !doc.expanded, doc.children)
+    else
+      new XmlDoc(doc.text, doc.expanded, doc.children.map(xml => toggleNodeVisibility(node, xml)))
+
+  def renderArrow(node: XmlDoc, klass: String) =
+    'span(
+      'class /= "icon pointer",
+      'i(
+        'class /= klass
+      ),
+      event('click) { access =>
+        access.transition {
+          case state => state.copy(xmls = state.xmls.map(doc => toggleNodeVisibility(node, doc)))
+        }
+      }
+    )
+
+  def renderRigthArrow(node: XmlDoc) = renderArrow(node, "fa fa-arrow-right")
+
+  def renderDownArrow(node: XmlDoc) = renderArrow(node, "fa fa-arrow-down")
+
   def renderXmlNode(doc: XmlDoc) : levsha.Document.Node[Context.Effect[Future, MyState, Any]] =
     'div(
+      // icon
+      if (doc.expanded) renderDownArrow(doc)
+        else renderRigthArrow(doc),
+      // content
       doc.text,
-      'div(
-        'class /= "xml-children-container",
-        doc.children.map(renderXmlNode),
-      ),
+      // children
+      if (doc.expanded) 'div(
+          'class /= "xml-children-container",
+          doc.children.map(renderXmlNode),
+        ) else "",
     )
 
   def showFormNewClient(state: MyState) =
@@ -306,11 +337,19 @@ object tabs extends App {
       'meta('charset /= "utf-8"),
       'meta('httpEquiv /= "X-UA-Compatible", 'content /= "IE=edge"),
       'meta('name /= "viewport", 'content /= "width=device-width, initial-scale=1"),
+      'link('rel /= "stylesheet", 'href /= "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"),
       'link('rel /= "stylesheet", 'href /= "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css"),
       // in hardcode we trust!
       'style(
         'type /= "text/css",
-        ".xml-children-container { padding-left: 10px; }"
+        """
+          .xml-children-container {
+            padding-left: 10px;
+          }
+          .pointer {
+            cursor: pointer;
+          }
+        """
       )
     )
 
